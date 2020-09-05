@@ -40,7 +40,6 @@ const todoRenderer = {
         <th></th>
       </tr>
     `,
-    // インデント変
     row: task => {
         return `
         <tr>
