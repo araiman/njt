@@ -1,10 +1,11 @@
 const taskForm = document.querySelector('.task-form');
-const todos = document.querySelector('.todos');
+const todoList = document.querySelector('.todo-list');
 
-let taskId = 0;
+const todos = [];
 
 const WIP = '作業中';
 const DONE = '完了';
+const DELETE_BUTTON_VALUE = '削除';
 
 class Task {
   constructor(id, value) {
@@ -14,27 +15,58 @@ class Task {
   }
 }
 
-const addTodo = task => {
-  const html = `
-    <tr>
-      <td>${task.id}</td>
-      <td>${task.value}</td>
-      <td><button>${task.state}</button></td>
-      <td><button>削除</button></td>
-    </tr>
-    `;
+const addTask = () => {
+  const value = taskForm.value.trim();
+  if (value.length) {
+    const task = new Task(todos.length, value)
 
-  todos.innerHTML += html;
+    todos.push(task);
+    appendToTodoList(task);
+
+    taskForm.value = '';
+  }
 }
 
-taskForm.addEventListener('submit', e => {
-  e.preventDefault();
+const appendToTodoList = task => {
+  const idCell = createCell(task.id);
+  const todoCell = createCell(task.value);
+  const stateCell = createCell(createButton(task.state));
+  const deleteCell = createCell(createButton(DELETE_BUTTON_VALUE));
 
-  const taskName = taskForm.task.value.trim();
+  const todo = createRow([idCell, todoCell, stateCell, deleteCell]);
 
-  if (taskName.length) {
-    const task = new Task(taskId++, taskName)
-    addTodo(task);
-    taskForm.reset();
+  todoList.appendChild(todo);
+}
+
+const createCell = value => {
+  const cell = document.createElement('td');
+
+  switch (typeof value) {
+    case "string":
+      cell.textContent = value;
+      break;
+    case "number":
+      cell.textContent = value;
+      break;
+    default:
+      cell.appendChild(value);
   }
-});
+
+  return cell;
+}
+
+const createButton = value => {
+  const button = document.createElement('button');
+  button.textContent = value;
+
+  return button;
+}
+
+const createRow = (columns) => {
+  const row = document.createElement('tr');
+  columns.forEach(c => {
+    row.appendChild(c);
+  })
+
+  return row;
+}

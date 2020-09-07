@@ -15,7 +15,7 @@
     <input name="state-filter" type="radio" value="wip">作業中
     <input name="state-filter" type="radio" value="done">完了
 
-    <table class="todos">
+    <table class="todo-list">
       <tr>
         <th>ID</th>
         <th>コメント</th>
@@ -25,9 +25,8 @@
     </table>
 
     <h2>新規タスクの追加</h2>
-    <form class="task-form">
-      <input type="text" class="form-control" name="task">
-    </form>
+    <input type="text" class="task-form">
+    <button class="add-task-button" onClick="addTask()">送信</button>
   </div>
 
 <script src="index.js"></script>
