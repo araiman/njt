@@ -38,6 +38,15 @@ const appendToTodoList = task => {
     todoList.appendChild(todo);
 }
 
+const createRow = (columns) => {
+    const row = document.createElement('tr');
+    columns.forEach(c => {
+        row.appendChild(c);
+    })
+
+    return row;
+}
+
 const createCell = value => {
     const cell = document.createElement('td');
 
@@ -62,11 +71,3 @@ const createButton = value => {
     return button;
 }
 
-const createRow = (columns) => {
-    const row = document.createElement('tr');
-    columns.forEach(c => {
-        row.appendChild(c);
-    })
-
-    return row;
-}
