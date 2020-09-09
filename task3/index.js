@@ -52,8 +52,6 @@ const createCell = value => {
 
     switch (typeof value) {
         case "string":
-            cell.textContent = value;
-            break;
         case "number":
             cell.textContent = value;
             break;
