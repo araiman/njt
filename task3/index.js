@@ -7,15 +7,6 @@ const WIP = '作業中';
 const DONE = '完了';
 const DELETE_BUTTON_VALUE = '削除';
 
-const todoListHeader = `
-    <tr>
-        <th>ID</th>
-        <th>コメント</th>
-        <th>状態</th>
-        <th></th>
-    </tr>
-`
-
 class Task {
     constructor(id, value) {
         this.id = id;
@@ -97,6 +88,6 @@ const deleteTask = e => {
 }
 
 const reRender = todos => {
-    todoListView.innerHTML = todoListHeader;
+    todoListView.innerHTML = '';
     todos.forEach(t => todoListView.appendChild(createTodoView(t)));
 }
