@@ -73,7 +73,7 @@ const createButton = text => {
 const createDeleteButton = id => {
     const button = createButton(DELETE_BUTTON_VALUE);
     button.value = id;
-    button.onclick = deleteTask;
+    button.addEventListener('click', deleteTask);
     return button;
 }
 
