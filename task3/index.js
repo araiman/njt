@@ -1,7 +1,7 @@
 const taskForm = document.querySelector('.task-form');
-const todoList = document.querySelector('.todo-list');
+const todoListView = document.querySelector('.todo-list');
 
-const todos = [];
+let todos = [];
 
 const WIP = '作業中';
 const DONE = '完了';
@@ -28,14 +28,24 @@ const addTask = () => {
 }
 
 const appendToTodoList = task => {
+    const todoView = createTodoView(task);
+    todoListView.appendChild(todoView);
+}
+
+const createTodoView = task => {
     const idCell = createCell(task.id);
     const todoCell = createCell(task.value);
     const stateCell = createCell(createButton(task.state));
-    const deleteCell = createCell(createButton(DELETE_BUTTON_VALUE));
+    const deleteCell = createCell(createDeleteButton(task.id));
 
-    const todo = createRow([idCell, todoCell, stateCell, deleteCell]);
+    return createRow([idCell, todoCell, stateCell, deleteCell]);
+}
 
-    todoList.appendChild(todo);
+const createRow = columns => {
+    const row = document.createElement('tr');
+    columns.forEach(c => row.appendChild(c));
+
+    return row;
 }
 
 const createCell = value => {
@@ -43,8 +53,6 @@ const createCell = value => {
 
     switch (typeof value) {
         case "string":
-            cell.textContent = value;
-            break;
         case "number":
             cell.textContent = value;
             break;
@@ -55,18 +63,31 @@ const createCell = value => {
     return cell;
 }
 
-const createButton = value => {
+const createButton = text => {
     const button = document.createElement('button');
-    button.textContent = value;
+    button.textContent = text;
 
     return button;
 }
 
-const createRow = (columns) => {
-    const row = document.createElement('tr');
-    columns.forEach(c => {
-        row.appendChild(c);
-    })
+const createDeleteButton = id => {
+    const button = createButton(DELETE_BUTTON_VALUE);
+    button.value = id;
+    button.addEventListener('click', deleteTask);
+    return button;
+}
 
-    return row;
+const deleteTask = e => {
+    todos = todos.filter(t => t.id != e.target.value)
+        .map((t, i) => {
+            t.id = i;
+            return t;
+        });
+
+    reRender(todos);
+}
+
+const reRender = todos => {
+    todoListView.innerHTML = '';
+    todos.forEach(t => todoListView.appendChild(createTodoView(t)));
 }
