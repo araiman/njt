@@ -1,16 +1,27 @@
 const taskForm = document.querySelector('.task-form');
 const todoListView = document.querySelector('.todo-list');
+const styleWip = document.querySelector('#style-wip');
+const styleDone = document.querySelector('#style-done');
 
 let todos = [];
 
-const WIP = '作業中';
-const DONE = '完了';
 const DELETE_BUTTON_VALUE = '削除';
+
+const taskState = {
+    wip: {
+        value: 'wip',
+        label: '作業中'
+    },
+    done: {
+        value: 'done',
+        label: '完了'
+    }
+}
 
 class Task {
     constructor(id, value) {
         this.id = id;
-        this.state = WIP;
+        this.state = taskState.wip;
         this.value = value;
     }
 }
@@ -35,14 +46,15 @@ const appendToTodoList = task => {
 const createTodoView = task => {
     const idCell = createCell(task.id);
     const todoCell = createCell(task.value);
-    const stateCell = createCell(createButton(task.id, task.state, switchState));
-    const deleteCell = createCell(createButton(task.id, DELETE_BUTTON_VALUE, deleteTask));
+    const stateCell = createCell(createButton(task.id, task.state.label, switchState));
+    const deleteCell = createCell(createButton(task.id, deleteButtonLabel, deleteTask));
 
-    return createRow([idCell, todoCell, stateCell, deleteCell]);
+    return createRow(task.state.value, [idCell, todoCell, stateCell, deleteCell]);
 }
 
-const createRow = columns => {
+const createRow = (state, columns) => {
     const row = document.createElement('tr');
+    row.classList.add(state);
     columns.forEach(c => row.appendChild(c));
 
     return row;
@@ -79,7 +91,7 @@ const switchState = e => {
             return;
         }
 
-        item.state = item.state === WIP ? DONE : WIP;
+        item.state = item.state === taskState.wip ? taskState.done : taskState.wip;
         tmp.push(item);
     });
     todos = tmp;
@@ -99,5 +111,21 @@ const deleteTask = e => {
 
 const reRender = todos => {
     todoListView.innerHTML = '';
-    todos.forEach(t => todoListView.appendChild(createTodoView(t)));
+    todos.forEach(item => todoListView.appendChild(createTodoView(item)));
+}
+
+const switchFilterByState = state => {
+    switch (state) {
+        case taskState.wip.value:
+            styleWip.disabled = false;
+            styleDone.disabled = true;
+            break;
+        case taskState.done.value:
+            styleWip.disabled = true;
+            styleDone.disabled = false;
+            break;
+        default:
+            styleWip.disabled = true;
+            styleDone.disabled = true;
+    }
 }
