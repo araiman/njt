@@ -35,8 +35,8 @@ const appendToTodoList = task => {
 const createTodoView = task => {
     const idCell = createCell(task.id);
     const todoCell = createCell(task.value);
-    const stateCell = createCell(createButton(task.state));
-    const deleteCell = createCell(createDeleteButton(task.id));
+    const stateCell = createCell(createButton(task.id, task.state, switchState));
+    const deleteCell = createCell(createButton(task.id, DELETE_BUTTON_VALUE, deleteTask));
 
     return createRow([idCell, todoCell, stateCell, deleteCell]);
 }
@@ -63,18 +63,28 @@ const createCell = value => {
     return cell;
 }
 
-const createButton = text => {
+const createButton = (id, text, clickEvent) => {
     const button = document.createElement('button');
     button.textContent = text;
-
+    button.value = id;
+    button.addEventListener('click', clickEvent);
     return button;
 }
 
-const createDeleteButton = id => {
-    const button = createButton(DELETE_BUTTON_VALUE);
-    button.value = id;
-    button.addEventListener('click', deleteTask);
-    return button;
+const switchState = e => {
+    tmp = []
+    todos.forEach(item => {
+        if (item.id != e.target.value) {
+            tmp.push(item);
+            return;
+        }
+
+        item.state = item.state === WIP ? DONE : WIP;
+        tmp.push(item);
+    });
+    todos = tmp;
+
+    reRender(todos);
 }
 
 const deleteTask = e => {
