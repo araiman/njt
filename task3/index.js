@@ -5,7 +5,7 @@ const styleDone = document.querySelector('#style-done');
 
 let todos = [];
 
-const DELETE_BUTTON_VALUE = '削除';
+const deleteButtonLabel = '削除';
 
 const taskState = {
     wip: {
@@ -64,8 +64,8 @@ const createCell = value => {
     const cell = document.createElement('td');
 
     switch (typeof value) {
-        case "string":
-        case "number":
+        case 'string':
+        case 'number':
             cell.textContent = value;
             break;
         default:
@@ -100,7 +100,7 @@ const switchState = e => {
 }
 
 const deleteTask = e => {
-    todos = todos.filter(t => t.id != e.target.value)
+    todos = todos.filter(item => item.id != e.target.value)
         .map((t, i) => {
             t.id = i;
             return t;
