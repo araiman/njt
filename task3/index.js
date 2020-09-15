@@ -73,14 +73,14 @@ const createButton = (id, text, clickEvent) => {
 
 const switchState = e => {
     tmp = []
-    todos.forEach(t => {
-        if (t.id != e.target.value) {
-            tmp.push(t);
+    todos.forEach(item => {
+        if (item.id != e.target.value) {
+            tmp.push(item);
             return;
         }
 
-        t.state = t.state === WIP ? DONE : WIP;
-        tmp.push(t);
+        item.state = item.state === WIP ? DONE : WIP;
+        tmp.push(item);
     });
     todos = tmp;
 
