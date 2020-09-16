@@ -1,15 +1,12 @@
 const taskForm = document.querySelector('.task-form');
 const todoListView = document.querySelector('.todo-list');
-const styleWip = document.querySelector('#style-wip');
-const styleDone = document.querySelector('#style-done');
 const stateFilter = document.querySelectorAll('.filter-button');
 const addTaskButton = document.querySelector('.add-task-button');
-
-let todos = [];
 
 const deleteButtonLabel = '削除';
 
 const taskState = {
+    default: {},
     wip: {
         value: 'wip',
         label: '作業中'
@@ -28,21 +25,18 @@ class Task {
     }
 }
 
+let todos = [];
+let displayState = taskState.default;
+
 const addTask = () => {
     const value = taskForm.value.trim();
     if (value.length) {
         const task = new Task(todos.length, value)
-
         todos.push(task);
-        appendToTodoList(task);
 
+        reRender(todos);
         taskForm.value = '';
     }
-}
-
-const appendToTodoList = task => {
-    const todoView = createTodoView(task);
-    todoListView.appendChild(todoView);
 }
 
 const createTodoView = task => {
@@ -56,7 +50,6 @@ const createTodoView = task => {
 
 const createRow = (state, columns) => {
     const row = document.createElement('tr');
-    row.classList.add(state);
     columns.forEach(c => row.appendChild(c));
 
     return row;
@@ -111,25 +104,28 @@ const deleteTask = e => {
     reRender(todos);
 }
 
-const reRender = todos => {
-    todoListView.innerHTML = '';
-    todos.forEach(item => todoListView.appendChild(createTodoView(item)));
-}
-
 const switchFilterByState = e => {
     switch (e.target.value) {
         case taskState.wip.value:
-            styleWip.disabled = false;
-            styleDone.disabled = true;
+            displayState = taskState.wip;
+            reRender(todos);
             break;
         case taskState.done.value:
-            styleWip.disabled = true;
-            styleDone.disabled = false;
+            displayState = taskState.done;
+            reRender(todos);
             break;
         default:
-            styleWip.disabled = true;
-            styleDone.disabled = true;
+            displayState = taskState.default;
+            reRender(todos);
     }
+}
+
+const reRender = todos => {
+    todoListView.innerHTML = '';
+
+    displayState === taskState.default
+        ? todos.forEach(item => todoListView.appendChild(createTodoView(item)))
+        : todos.filter(item => item.state === displayState).forEach(item => todoListView.appendChild(createTodoView(item)));
 }
 
 window.onload = () => {
