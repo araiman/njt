@@ -2,6 +2,8 @@ const taskForm = document.querySelector('.task-form');
 const todoListView = document.querySelector('.todo-list');
 const styleWip = document.querySelector('#style-wip');
 const styleDone = document.querySelector('#style-done');
+const stateFilter = document.querySelectorAll('.filter-button');
+const addTaskButton = document.querySelector('.add-task-button');
 
 let todos = [];
 
@@ -114,8 +116,8 @@ const reRender = todos => {
     todos.forEach(item => todoListView.appendChild(createTodoView(item)));
 }
 
-const switchFilterByState = state => {
-    switch (state) {
+const switchFilterByState = e => {
+    switch (e.target.value) {
         case taskState.wip.value:
             styleWip.disabled = false;
             styleDone.disabled = true;
@@ -128,4 +130,9 @@ const switchFilterByState = state => {
             styleWip.disabled = true;
             styleDone.disabled = true;
     }
+}
+
+window.onload = () => {
+    stateFilter.forEach(f => f.addEventListener('change', switchFilterByState));
+    addTaskButton.addEventListener('click', addTask);
 }

@@ -13,9 +13,9 @@
         <h1>ToDoリスト</h1>
     </header>
 
-    <label><input name="state-filter" type="radio" checked="checked" onchange="switchFilterByState()">すべて</label>
-    <label><input name="state-filter" type="radio" onchange="switchFilterByState('wip')">作業中</label>
-    <label><input name="state-filter" type="radio" onchange="switchFilterByState('done')">完了</label>
+    <label><input name="state-filter" type="radio" class="filter-button" checked="checked">すべて</label>
+    <label><input name="state-filter" type="radio" class="filter-button" value="wip">作業中</label>
+    <label><input name="state-filter" type="radio" class="filter-button" value="done">完了</label>
 
     <table>
         <thead>
@@ -32,7 +32,7 @@
 
     <h2>新規タスクの追加</h2>
     <input type="text" class="task-form">
-    <button class="add-task-button" onClick="addTask()">送信</button>
+    <button class="add-task-button">送信</button>
 </div>
 
 <script src="index.js"></script>
